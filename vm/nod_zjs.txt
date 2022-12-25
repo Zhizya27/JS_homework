@@ -1,0 +1,22 @@
+input 200 460 //первое число
+input 201 2345 //второе число
+input 202 0
+spot 203
+sub 201 200 201
+endspot
+spot 204
+sub 200 201 200
+endspot
+spot 205
+output 200
+exit
+endspot
+spot 206
+output 201
+exit
+endspot
+je 200 202 206
+je 201 202 205
+jb 200 201 204
+je 200 201 204
+jz 200 201 203

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamming code</title>
+    
+</head>
+<body>
+    <h1>Hamming</h1>
+    <p>to code</p>
+    <input type="text" maxlength="4" id="textCode">
+    <input type="button" value="code" id="code">
+    <br>
+    <input type="text" maxlength="7" id="textDecode">
+    <input type="button" value="decode" id="decode">
+    <br>
+    <p id="error"></p>
+    <script>
+        document.getElementById("code").addEventListener("click", () => {
+            let text = document.getElementById("textCode").value;
+            let sum = 0;
+            for(let i of text) {
+                sum += Number(i);
+            }
+            if(sum % 2 != 0) {
+                document.getElementById("error").textContent = "Error/ Невозможно";
+                return;
+            }
+            document.getElementById("error").textContent = "";
+            let ost = [Number(text[3]), Number(text[3]), Number(text[3])];
+            ost[0] += Number(text[0]) + Number(text[1]);
+            ost[1] += Number(text[2]) + Number(text[1]);
+            ost[2] += Number(text[2])  + Number(text[0]);
+            text += String(ost[0] % 2) + String(ost[1] % 2) + String(ost[2] % 2);
+            document.getElementById("textDecode").value = text;
+        })
+        document.getElementById("decode").addEventListener("click", () => {
+           // console.log("Нникитосик сперминов кудряшкин химзавивка");
+           let text = document.getElementById("textDecode").value;
+           let ost = [Number(text[3]), Number(text[3]), Number(text[3])];
+            ost[0] += Number(text[0]) + Number(text[4]) + Number(text[6]);
+            ost[1] += Number(text[1]) + Number(text[5]) + Number(text[4]);
+            ost[2] += Number(text[2])  + Number(text[5]) + Number(text[6]);
+            ost = ost.map((el) => el % 2);
+            let badBite;
+            let sum = 0;
+            for(let i of ost){
+                sum += i;
+            } 
+            if(sum == 3) {
+                badBite = 3;
+            } else if (sum == 2) {
+                if(ost[0] == ost[1]) {
+                    badBite = 4;
+                } else if(ost[1] == ost[2]) {
+                    badBite = 5;
+                }  else if(ost[2] == ost[0]) {
+                    badBite = 6;
+                }
+            }  else if (sum == 1){
+                badBite = ost.indexOf(1);
+            } else {
+                document.getElementById("error").textContent = "The thunderer didn't come!";
+                return;
+            }
+            document.getElementById("error").textContent = `Correct: ${text.slice(0, badBite) + (text[badBite] == "1" ? "0" : "1") + text.slice(badBite+1)}. Error in ${badBite+1} bit.`;
+        })
+        
+    </script>
+    
+</body>
+</html>
