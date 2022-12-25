@@ -3,7 +3,7 @@ let arg = process.argv;
 let str = fs.readFileSync(arg[2]).toString();
 let key = arg[3].toString();
 
-const bf = () => {
+function bruteforce() {
     let arr = new Array();
     for (i = 0; i < str.length; i++){
         if(str.charAt(i) == key.charAt(0)){
@@ -24,7 +24,7 @@ const bf = () => {
 }
 
 
-const hash1 = () => {
+function hash1() {
     let arr = new Array();
     let codeStr = 0, codeKey = 0;
     let len_key = key.length;
@@ -56,7 +56,7 @@ const hash1 = () => {
 
 console.log("Bruteforce:");
 console.time('Time');
-console.log(bf().join(', '));
+console.log(bruteforce().join(', '));
 console.timeEnd('Time');
 
 console.log("Hash1:");
@@ -64,4 +64,3 @@ console.time('Time');
 console.log(hash1().join(', '));
 console.timeEnd('Time');
 
-// node bf.js testText.txt мне

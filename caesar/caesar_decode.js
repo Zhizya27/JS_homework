@@ -41,7 +41,6 @@ for (let i = 0; i <= amount; i++) {
         check += Math.pow(freq[(count + shift) % amount] - cf[j], 2)
         count++;
     }
-    console.log(min, check)
     if (min > check) {
         min = check;
         minShift = shift;
@@ -50,7 +49,7 @@ for (let i = 0; i <= amount; i++) {
 }
 
 count = 0;
-console.log(minShift, min)
+
 for(let i in letters){
     move[(count + minShift) % amount] = i;
     count++;
@@ -62,8 +61,7 @@ for(let i in letters){
     key[i] = move[count];
     count++;
 }
-console.log(letters);
-console.log(key);
+
 for (let i of text){
     if(!trashcan.includes(i)){
       outText += key[i];

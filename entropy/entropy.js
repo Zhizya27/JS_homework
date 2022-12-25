@@ -16,7 +16,7 @@ for(i in alph){
     n ++;
 } 
 
-for (i in alph){
+for(i in alph){
     h = 0;
     h -=  alph[i] * Math.log(alph[i]);
 }

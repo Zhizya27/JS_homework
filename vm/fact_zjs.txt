@@ -5,7 +5,7 @@ input 103 1
 spot 104
 multi 103 102 103
 sub 102 101 102
-endspot 
+endspot
 jb 102 100 104 // сравнение с нулем
 output 103
 exit
