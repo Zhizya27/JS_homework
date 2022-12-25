@@ -1,15 +1,15 @@
 let fs = require('fs');
 let arg = process.argv;
-let str = fs.readFileSync(arg[2]).toString();
-let key = arg[3].toString();
+let text = fs.readFileSync(arg[2]).toString();
+let str = arg[3].toString();
 
 function bruteforce() {
     let arr = new Array();
-    for (i = 0; i < str.length; i++){
-        if(str.charAt(i) == key.charAt(0)){
-            for(j = 0; j < key.length; j++){
-                if(str.charAt(i + j) == key.charAt(j)){
-                    if (j == key.length - 1){
+    for (i = 0; i < text.length; i++){
+        if(text.charAt(i) == str.charAt(0)){
+            for(j = 0; j < str.length; j++){
+                if(text.charAt(i + j) == str.charAt(j)){
+                    if (j == str.length - 1){
                         arr.push(i + 1);
                     }
                 }
@@ -26,22 +26,48 @@ function bruteforce() {
 
 function hash1() {
     let arr = new Array();
-    let codeStr = 0, codeKey = 0;
-    let len_key = key.length;
-
-    for (i = 0; i < len_key; i++){
-        codeKey += key.charCodeAt(i);
+    let codeText = 0, codeStr = 0;
+   
+    for (i = 0; i < str.length; i++){
         codeStr += str.charCodeAt(i);
+        codeText += text.charCodeAt(i);
     }
 
-    for(i = 1; i < str.length; i++){
+    for(i = 1; i < text.length; i++){
         if (i > 1){
-            codeStr = codeStr - str.charCodeAt(i - 2) + str.charCodeAt(i + key.length - 2);
+            codeText = codeText - text.charCodeAt(i - 2) + text.charCodeAt(i + str.length - 2);
         }
-        if(codeStr == codeKey){
-            for (j = 0; j < len_key; j++){
-                if(str.charAt(j + i - 1) == key.charAt(j)){
-                    if (j == len_key - 1){
+        if(codeText == codeStr){
+            for (j = 0; j < str.length; j++){
+                if(text.charAt(j + i - 1) == str.charAt(j)){
+                    if (j == str.length - 1){
+                        arr.push(i);
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+        }
+    }
+
+    return arr;
+}
+function hash2() {
+    let arr = new Array();
+    let codeText = 0, codeStr = 0;
+       
+    for (let i = 0; i < str.length; i++){
+        codeStr += str.charCodeAt(i) * Math.pow(2, str.length - i - 1);
+        codeText += text.charCodeAt(i) * Math.pow(2, str.length - i - 1);
+        
+    }
+    
+    for (i = 1; i <= text.length - str.length + 1; i++){
+        if (codeText == codeStr){
+            for (j = 0; j < str.length ; j++){
+                if(text.charAt(j + i - 1) == str.charAt(j)){
+                    if (j == str.length - 1){
                         arr.push(i);
                     }
                 }
@@ -50,10 +76,38 @@ function hash1() {
                 }
             }
         }
+        codeText = (codeText - text.charCodeAt(i - 1) * Math.pow(2, str.length - 1)) * 2 + text.charCodeAt(str.length + i - 1);
     }
     return arr;
 }
 
+function hash3(){
+    let arr = new Array();
+    let codeText = 0, codeStr = 0;
+ 
+    
+    for (let i = 0; i < str.length; i++){
+        codeStr += str.charCodeAt(i) * str.charCodeAt(i);
+        codeText += text.charCodeAt(i) * text.charCodeAt(i);
+    }
+    
+    let i = 1;
+    while (i <= text.length - str.length + 1) {
+        if (codeStr == codeText) {
+            let j = 0;
+            while (text.charAt(i - 1 + j) === str.charAt(j)){
+                j++
+                if (j == str.length){
+                    arr.push(i);
+                    break;
+                }
+            }
+        }
+        codeText = (codeText - text.charCodeAt(i - 1) * text.charCodeAt(i - 1)) + text.charCodeAt(i - 1 + str.length) * text.charCodeAt(i - 1 + str.length);
+        i++;
+    }
+    return arr;
+}
 console.log("Bruteforce:");
 console.time('Time');
 console.log(bruteforce().join(', '));
@@ -62,5 +116,15 @@ console.timeEnd('Time');
 console.log("Hash1:");
 console.time('Time');
 console.log(hash1().join(', '));
+console.timeEnd('Time');
+
+console.log("Hash2:");
+console.time('Time');
+console.log(hash2().join(', '));
+console.timeEnd('Time');
+
+console.log("Hash3:");
+console.time('Time');
+console.log(hash3().join(', '));
 console.timeEnd('Time');
 
